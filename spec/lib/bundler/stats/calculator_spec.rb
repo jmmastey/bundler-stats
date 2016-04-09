@@ -1,7 +1,8 @@
 require 'bundler'
+require 'bundler/stats'
 require 'pry'
 
-describe Bundler::Stats::DependencyCalculator do
+describe Bundler::Stats::Calculator do
   subject { described_class }
   let(:gemfile_path) { File.join(File.dirname(__FILE__), "../../../test_gemfile.lock") }
   let(:lockfile_path) { File.join(File.dirname(__FILE__), "../../../test_gemfile") }

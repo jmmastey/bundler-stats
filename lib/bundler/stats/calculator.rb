@@ -1,6 +1,6 @@
 module Bundler
   module Stats
-    class DependencyCalculator
+    class Calculator
       attr_reader :parser, :tree
 
       def initialize(lock_path)
