@@ -1,5 +1,5 @@
 module Bundler
-  module Deps
+  module Stats
     class DependencyCalculator
       attr_reader :parser, :tree
 
@@ -8,7 +8,7 @@ module Bundler
 
         lock_contents = File.read(lock_path)
         @parser = Bundler::LockfileParser.new(lock_contents)
-        @tree = Bundler::Deps::Tree.new(@parser)
+        @tree = Bundler::Stats::Tree.new(@parser)
       end
     end
   end

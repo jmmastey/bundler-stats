@@ -3,19 +3,19 @@
 lib_dir = File.join(File.dirname(__FILE__),'lib')
 $LOAD_PATH << lib_dir unless $LOAD_PATH.include?(lib_dir)
 
-require 'bundler/deps/version'
+require 'bundler/stats/version'
 
 Gem::Specification.new do |gem|
 
-  gem.name    = "bundler-deps"
-  gem.version = Bundler::Deps::VERSION
+  gem.name    = "bundler-stats"
+  gem.version = Bundler::Stats::VERSION
 
   gem.summary     = "Dependency investigation for Bundler"
   gem.description = "Looks through your lockfile and tries to identify problematic use of dependencies"
   gem.licenses    = "MIT"
   gem.authors     = "Joseph Mastey"
   gem.email       = "jmmastey@gmail.com"
-  gem.homepage    = "http://github.com/jmmastey/bundler-deps"
+  gem.homepage    = "http://github.com/jmmastey/bundler-stats"
 
   glob = lambda { |patterns| gem.files & Dir[*patterns] }
 

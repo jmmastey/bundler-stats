@@ -1,6 +1,6 @@
 module Bundler
-  module Deps
-    # bundler-deps version
+  module Stats
+    # bundler-stats version
     VERSION = '0.0.1'
   end
 end

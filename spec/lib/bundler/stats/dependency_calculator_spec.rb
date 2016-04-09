@@ -1,8 +1,7 @@
 require 'bundler'
-require 'bundler/deps'
 require 'pry'
 
-describe Bundler::Deps::DependencyCalculator do
+describe Bundler::Stats::DependencyCalculator do
   subject { described_class }
   let(:gemfile_path) { File.join(File.dirname(__FILE__), "../../../test_gemfile.lock") }
   let(:lockfile_path) { File.join(File.dirname(__FILE__), "../../../test_gemfile") }
@@ -27,13 +26,13 @@ describe Bundler::Deps::DependencyCalculator do
     it "creates a tree instance" do
       target = subject.new(lockfile_path)
 
-      expect(target.tree).to be_a(Bundler::Deps::Tree)
+      expect(target.tree).to be_a(Bundler::Stats::Tree)
     end
 
     it "creates a parsed gemfile instance" do
       target = subject.new(lockfile_path)
 
-      expect(target.tree).to be_a(Bundler::Deps::Tree)
+      expect(target.tree).to be_a(Bundler::Stats::Tree)
     end
   end
 end

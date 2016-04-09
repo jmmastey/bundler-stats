@@ -1,8 +1,7 @@
 require 'bundler'
-require 'bundler/deps'
-require 'pry'
+require 'bundler/stats'
 
-describe Bundler::Deps::Tree do
+describe Bundler::Stats::Tree do
   subject { described_class }
   let(:lock_path) { File.join(File.dirname(__FILE__), "../../../test_gemfile.lock") }
   let(:parser) { Bundler::LockfileParser.new(File.read(lock_path)) }

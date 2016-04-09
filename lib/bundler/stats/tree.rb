@@ -1,4 +1,4 @@
-class Bundler::Deps::Tree
+class Bundler::Stats::Tree
   def initialize(parser)
     raise ArgumentError unless parser.is_a? Bundler::LockfileParser
 
