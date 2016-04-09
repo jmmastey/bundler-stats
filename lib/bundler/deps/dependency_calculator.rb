@@ -8,15 +8,7 @@ module Bundler
 
         lock_contents = File.read(lock_path)
         @parser = Bundler::LockfileParser.new(lock_contents)
-      end
-
-      def total_dependencies
-        @parser.dependencies.count
-      end
-
-      def nonspecific_dependencies
-        nonspecific = @parser.dependencies.select { |dep| dep.requirement.specific? }
-        nonspecific.count
+        @tree = Bundler::Deps::Tree.new(@parser)
       end
     end
   end
