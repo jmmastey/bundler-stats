@@ -24,17 +24,6 @@ describe Bundler::Deps::DependencyCalculator do
     end
   end
 
-  context "#tree" do
-    it "has a hash-based set of specs" do
-      expect(calculator.tree.length).to eq(calculator.parser.specs.length)
-      expect(calculator.tree.keys.first).to eq("actionmailer")
-    end
-
-    it "is keyed by gem name" do
-      expect(calculator.tree["actionmailer"]).not_to be_nil
-    end
-  end
-
   context "#total_dependencies" do
     it "counts all the dependencies" do
       expect(calculator.total_dependencies).to eq 46

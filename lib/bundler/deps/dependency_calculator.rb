@@ -8,7 +8,6 @@ module Bundler
 
         lock_contents = File.read(lock_path)
         @parser = Bundler::LockfileParser.new(lock_contents)
-        @tree   = specs_as_tree(@parser.specs)
       end
 
       def total_dependencies
@@ -18,14 +17,6 @@ module Bundler
       def nonspecific_dependencies
         nonspecific = @parser.dependencies.select { |dep| dep.requirement.specific? }
         nonspecific.count
-      end
-
-      private
-
-      def specs_as_tree(specs)
-        specs.each_with_object({}) do |spec, hash|
-          hash[spec.name] = spec
-        end
       end
     end
   end
