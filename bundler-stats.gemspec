@@ -30,6 +30,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = %w[ext lib].select { |dir| File.directory?(dir) }
 
   gem.add_dependency "bundler", "~> 1.9"
+  gem.add_dependency "thor", "~> 0.19"
 
   gem.add_development_dependency "rspec", "~> 3.4"
   gem.add_development_dependency "guard", "~> 2.13"

@@ -6,13 +6,28 @@ class Bundler::Stats::Tree
     @tree   = specs_as_tree(@parser.specs)
   end
 
+  def summarize(target)
+    { total_dependencies: transitive_dependencies(target).count,
+      first_level_dependencies: first_level_dependencies(target).count
+    }
+  end
+
+  def first_level_dependencies(target)
+    raise ArgumentError, "Unknown gem #{target}" unless @tree.has_key? target
+    @tree[target].dependencies
+  end
+
   def transitive_dependencies(target)
-    raise ArgumentError unless @tree.has_key? target
+    raise ArgumentError, "Unknown gem #{target}" unless @tree.has_key? target
 
     top_level = @tree[target].dependencies
     top_level + top_level.inject([]) do |arr, dep|
+      # turns out bundler refuses to include itself in the dependency tree,
+      # which is sneaky
+      next arr if dep.name == "bundler"
+
       arr += transitive_dependencies(dep.name)
-    end
+    end.uniq
   end
 
   private
