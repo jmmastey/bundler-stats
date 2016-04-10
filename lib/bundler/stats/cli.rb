@@ -14,7 +14,9 @@ module Bundler
 
       desc 'stats', 'Displays basic stats about the gems in your Gemfile'
       method_option :format, aliases: "-f", description: "Output format, either JSON or text"
+      method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
       def stats
+        calculator = build_calculator(options)
         stats = calculator.stats
 
         if options[:format] =~ /json/i
@@ -26,8 +28,11 @@ module Bundler
 
       desc 'show TARGET', 'Prints the dependency tree for a single gem in your Gemfile'
       method_option :format, aliases: "-f", description: "Output format, either JSON or text"
+      method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
       def show(target)
+        calculator = build_calculator(options)
         stats = calculator.single_stat(target)
+
         if options[:format] =~ /json/i
           say JSON.pretty_generate(stats)
         else
@@ -58,13 +63,19 @@ module Bundler
       def draw_show(stats, target)
         say "bundle-stats for #{target}"
         say ""
-        say "depended upon by (#{stats[:top_level_dependencies].count}) | #{stats[:top_level_dependencies].values.map(&:name).join(', ')}"
-        say "depends on (#{stats[:all_deps].count})      | #{stats[:all_deps].map(&:name).join(', ')}"
+        say "depended upon by (#{stats[:top_level_dependencies].count}) | #{stats[:top_level_dependencies].values.map(&:name).join(', ')}\n"
+        say "depends on (#{stats[:all_deps].count})      | #{stats[:all_deps].map(&:name).join(', ')}\n"
         say ""
       end
 
-      def calculator
-        @calculator ||= Bundler::Stats::Calculator.new(gemfile_path, lockfile_path)
+      def build_calculator(options)
+        if !options[:nofollow].nil?
+          skiplist = options[:nofollow].gsub(/\s+/, '').split(",")
+        else
+          skiplist = []
+        end
+
+        @calculator ||= Bundler::Stats::Calculator.new(gemfile_path, lockfile_path, skiplist: skiplist)
       end
 
       def gemfile_path

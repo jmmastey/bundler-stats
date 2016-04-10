@@ -123,4 +123,22 @@ describe Bundler::Stats::Tree do
       expect(target).to include("depth-one")
     end
   end
+
+  context "skip lists" do
+    it "still includes the skipped entry" do
+      tree = subject.new(parser, skiplist: ["depth-three"])
+
+      target = tree.transitive_dependencies("depth-one")
+
+      expect(target.map(&:name)).to include("depth-three")
+    end
+
+    it "stops processing the children of skipped entries" do
+      tree = subject.new(parser, skiplist: ["depth-three"])
+
+      target = tree.transitive_dependencies("depth-one")
+
+      expect(target.map(&:name)).not_to include("depth-four")
+    end
+  end
 end

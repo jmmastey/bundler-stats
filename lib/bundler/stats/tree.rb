@@ -1,11 +1,12 @@
 require 'pry'
 
 class Bundler::Stats::Tree
-  def initialize(parser)
+  def initialize(parser, skiplist: [])
     raise ArgumentError unless parser.is_a? Bundler::LockfileParser
 
-    @parser = parser
-    @tree   = specs_as_tree(@parser.specs)
+    @parser   = parser
+    @tree     = specs_as_tree(@parser.specs)
+    @skiplist = skiplist
   end
 
   def summarize(target)
@@ -29,6 +30,7 @@ class Bundler::Stats::Tree
       # turns out bundler refuses to include itself in the dependency tree,
       # which is sneaky
       next arr if dep.name == "bundler"
+      next arr if @skiplist.include? dep.name
 
       arr += transitive_dependencies(dep.name)
     end.uniq

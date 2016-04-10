@@ -33,6 +33,16 @@ describe Bundler::Stats::Calculator do
 
       expect(target.gemfile).to be_a(Array)
     end
+
+    it "passes on the skiplist argument" do
+      allow(Bundler::Stats::Tree).to receive(:new) {}
+      # this sucks. break this dependency further
+      allow(Bundler::LockfileParser).to receive(:new) { "parser" }
+
+      target = subject.new(gemfile_path, lockfile_path, skiplist: "abc")
+
+      expect(Bundler::Stats::Tree).to have_received(:new).with("parser", skiplist: "abc")
+    end
   end
 
   describe "#stats" do
