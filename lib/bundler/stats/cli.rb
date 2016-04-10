@@ -67,14 +67,22 @@ module Bundler
         @calculator ||= Bundler::Stats::Calculator.new(gemfile_path, lockfile_path)
       end
 
-      # TODO walk upward
       def gemfile_path
-        "./Gemfile"
+        cwd = Pathname.new(".")
+        until cwd.realdirpath.root? do
+          return (cwd + "Gemfile") if File.exist?(cwd + "Gemfile")
+          cwd = cwd.parent
+        end
+        raise ArgumentError, "Couldn't find Gemfile in this directory or parents"
       end
 
-      # TODO walk upward
       def lockfile_path
-        "./Gemfile.lock"
+        cwd = Pathname.new(".")
+        until cwd.realdirpath.root? do
+          return (cwd + "Gemfile.lock") if File.exist?(cwd + "Gemfile.lock")
+          cwd = cwd.parent
+        end
+        raise ArgumentError, "Couldn't find Gemfile in this directory or parents"
       end
     end
   end
