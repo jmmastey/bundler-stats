@@ -3,7 +3,7 @@ require 'bundler'
 module Bundler
   module Stats
     class Calculator
-      attr_reader :parser, :tree, :gemfile
+      attr_reader :parser, :tree, :gemfile, :remover
 
       def initialize(gemfile_path, lockfile_path, options = {})
         raise ArgumentError unless File.readable?(lockfile_path)
@@ -16,11 +16,13 @@ module Bundler
 
         skiplist = options.fetch(:skiplist, [])
         @tree = Bundler::Stats::Tree.new(@parser, skiplist: skiplist)
+
+        @remover = Bundler::Stats::Remover.new(@tree, @gemfile)
       end
 
-      def single_stat(target)
+      def summarize(target)
         @tree.summarize(target).merge({
-          all_deps: @tree.transitive_dependencies(target)
+          potential_removals: @remover.potential_removals(target)
         })
       end
 

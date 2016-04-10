@@ -1,8 +1,10 @@
 require 'pry'
 
 class Bundler::Stats::Tree
+  attr_accessor :tree
+
   def initialize(parser, skiplist: [])
-    raise ArgumentError unless parser.is_a? Bundler::LockfileParser
+    raise ArgumentError unless parser.respond_to?(:specs)
 
     @parser   = parser
     @tree     = specs_as_tree(@parser.specs)
@@ -10,10 +12,12 @@ class Bundler::Stats::Tree
   end
 
   def summarize(target)
+    transitive_dependencies = transitive_dependencies(target)
     { name: target,
-      total_dependencies: transitive_dependencies(target).count,
+      total_dependencies: transitive_dependencies.count,
       first_level_dependencies: first_level_dependencies(target).count,
       top_level_dependencies: reverse_dependencies(target),
+      transitive_dependencies: transitive_dependencies,
     }
   end
 

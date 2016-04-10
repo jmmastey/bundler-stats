@@ -7,10 +7,8 @@ require 'bundler/stats'
 module Bundler
   module Stats
     class CLI < ::Thor
-
       default_task :stats
       map '--version' => :version, "-v" => :version
-
 
       desc 'stats', 'Displays basic stats about the gems in your Gemfile'
       method_option :format, aliases: "-f", description: "Output format, either JSON or text"
@@ -31,7 +29,7 @@ module Bundler
       method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
       def show(target)
         calculator = build_calculator(options)
-        stats = calculator.single_stat(target)
+        stats = calculator.summarize(target)
 
         if options[:format] =~ /json/i
           say JSON.pretty_generate(stats)
@@ -64,7 +62,8 @@ module Bundler
         say "bundle-stats for #{target}"
         say ""
         say "depended upon by (#{stats[:top_level_dependencies].count}) | #{stats[:top_level_dependencies].values.map(&:name).join(', ')}\n"
-        say "depends on (#{stats[:all_deps].count})      | #{stats[:all_deps].map(&:name).join(', ')}\n"
+        say "depends on (#{stats[:transitive_dependencies].count})      | #{stats[:transitive_dependencies].map(&:name).join(', ')}\n"
+        say "unique to this (#{stats[:potential_removals].count})   | #{stats[:potential_removals].map(&:name).join(', ')}\n"
         say ""
       end
 
