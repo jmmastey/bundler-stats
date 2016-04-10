@@ -94,11 +94,33 @@ describe Bundler::Stats::Tree do
       tree = subject.new(parser)
       allow(tree).to receive(:first_level_dependencies) { [] }
       allow(tree).to receive(:transitive_dependencies) { [] }
+      allow(tree).to receive(:reverse_dependencies) { [] }
 
       target = tree.summarize("depth-one")
 
       expect(tree).to have_received(:first_level_dependencies)
       expect(tree).to have_received(:transitive_dependencies)
+      expect(tree).to have_received(:reverse_dependencies)
+    end
+  end
+
+  context "#reverse_dependencies" do
+    it "returns nothing for a top-level dependency" do
+      tree = subject.new(parser)
+
+      target = tree.reverse_dependencies("depth-one")
+
+      expect(target).to be_a(Hash)
+      expect(target).to be_empty
+    end
+
+    it "returns the parent dependency for a second-level dep" do
+      tree = subject.new(parser)
+
+      target = tree.reverse_dependencies("depth-two")
+
+      expect(target).to be_a(Hash)
+      expect(target).to include("depth-one")
     end
   end
 end

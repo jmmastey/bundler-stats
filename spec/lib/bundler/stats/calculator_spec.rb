@@ -1,6 +1,5 @@
 require 'bundler'
 require 'bundler/stats'
-require 'pry'
 
 describe Bundler::Stats::Calculator do
   subject { described_class }
@@ -55,6 +54,16 @@ describe Bundler::Stats::Calculator do
       expect(calculator).to have_received(:gem_stats)
       expect(target[:gems]).to eq(rbis: 35)
     end
+
+    it "asks for a summary" do
+      calculator = subject.new(gemfile_path, lockfile_path)
+      allow(calculator).to receive(:summary).and_return(rbis: 35)
+
+      target = calculator.stats
+
+      expect(calculator).to have_received(:summary)
+      expect(target[:summary]).to eq(rbis: 35)
+    end
   end
 
   context "#gem_stats" do
@@ -63,8 +72,20 @@ describe Bundler::Stats::Calculator do
 
       target = calculator.gem_stats
 
-      expect(target).to be_a(Hash)
+      expect(target).to be_a(Array)
       expect(target.length).to eq(calculator.gemfile.length)
+    end
+  end
+
+  context "#summary" do
+    it "is a hash" do
+      calculator = subject.new(gemfile_path, lockfile_path)
+
+      target = calculator.summary
+
+      expect(target).to be_a(Hash)
+      expect(target).to include(:total_gems)
+      expect(target).to include(:unpinned_gems)
     end
   end
 end

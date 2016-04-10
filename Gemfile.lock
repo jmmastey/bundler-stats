@@ -3,6 +3,7 @@ PATH
   specs:
     bundler-stats (0.0.1)
       bundler (~> 1.9)
+      thor (~> 0.19)
 
 GEM
   remote: https://rubygems.org/

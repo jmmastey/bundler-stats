@@ -1,3 +1,5 @@
+require 'pry'
+
 class Bundler::Stats::Tree
   def initialize(parser)
     raise ArgumentError unless parser.is_a? Bundler::LockfileParser
@@ -7,8 +9,10 @@ class Bundler::Stats::Tree
   end
 
   def summarize(target)
-    { total_dependencies: transitive_dependencies(target).count,
-      first_level_dependencies: first_level_dependencies(target).count
+    { name: target,
+      total_dependencies: transitive_dependencies(target).count,
+      first_level_dependencies: first_level_dependencies(target).count,
+      top_level_dependencies: reverse_dependencies(target),
     }
   end
 
@@ -28,6 +32,14 @@ class Bundler::Stats::Tree
 
       arr += transitive_dependencies(dep.name)
     end.uniq
+  end
+
+  # TODO: this is a very stupid way to walk this tree
+  def reverse_dependencies(target)
+    @tree.select do |name, dep|
+      all_deps = transitive_dependencies(name)
+      all_deps.any? { |dep| dep.name == target }
+    end
   end
 
   private
