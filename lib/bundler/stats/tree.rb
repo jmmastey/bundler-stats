@@ -30,14 +30,16 @@ class Bundler::Stats::Tree
     raise ArgumentError, "Unknown gem #{target}" unless @tree.has_key? target
 
     top_level = @tree[target].dependencies
-    top_level + top_level.inject([]) do |arr, dep|
+    all_level = top_level + top_level.inject([]) do |arr, dep|
       # turns out bundler refuses to include itself in the dependency tree,
       # which is sneaky
       next arr if dep.name == "bundler"
       next arr if @skiplist.include? dep.name
 
       arr += transitive_dependencies(dep.name)
-    end.uniq
+    end
+
+    all_level.uniq { |d| d.name }
   end
 
   # TODO: this is a very stupid way to walk this tree
