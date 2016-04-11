@@ -10,6 +10,28 @@ This project gives you some tools you can use with your existing Gemfile to
 determine which gems are including long trees of data, and which you can
 potentially remove.
 
+Installation
+------------
+
+You don't need to include `bundler-stats` in your Gemfile, just
+`gem install bundler-stats`. Unless you wanted to build automation around its
+usage, in which case, add it to your Gemfile instead. 
+
+
+Usage
+------------
+
+    > bundle-stats help
+      Commands:
+        bundle-stats help [COMMAND]  # Describe available commands or one specific command
+        bundle-stats show TARGET     # Prints the dependency tree for a single gem in your Gemfile
+        bundle-stats stats           # Displays basic stats about the gems in your Gemfile
+        bundle-stats version         # Prints the bundler-stats version
+
+Or just run `bundle-stats` anywhere within your ruby project. You can emit JSON
+for automatic consumption with `-f json`.
+
+
 Contributing
 ------------
 
