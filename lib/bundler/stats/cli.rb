@@ -54,8 +54,11 @@ module Bundler
         end
         say "+------------------------------|-----------------|-----------------+"
         say ""
-        say "Declared Gems: %s, %s unpinned" % summary.values
+        say "Declared Gems:     #{summary[:declared]}"
+        say "Total Gems:        #{summary[:total]}"
         say ""
+        say "Unpinned Versions: #{summary[:unpinned]}"
+        say "Github Refs:       #{summary[:github]}"
       end
 
       def draw_show(stats, target)
@@ -78,7 +81,7 @@ module Bundler
       end
 
       def gemfile_path
-        cwd = Pathname.new(".")
+        cwd = Pathname.new("./")
         until cwd.realdirpath.root? do
           return (cwd + "Gemfile") if File.exist?(cwd + "Gemfile")
           cwd = cwd.parent

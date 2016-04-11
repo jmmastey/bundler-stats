@@ -9,7 +9,10 @@ module Bundler
         raise ArgumentError unless File.readable?(lockfile_path)
         raise ArgumentError unless File.readable?(gemfile_path)
 
-        @gemfile = Bundler::Dsl.new.eval_gemfile(gemfile_path)
+        @gemfile = Bundler::Dsl.new
+        @gemfile.eval_gemfile(gemfile_path)
+        @gemfile = @gemfile.dependencies
+        raise ArgumentError, "Couldn't parse Gemfile at #{gemfile_path.realdirpath}" unless @gemfile
 
         lock_contents = File.read(lockfile_path)
         @parser = Bundler::LockfileParser.new(lock_contents)
@@ -34,9 +37,17 @@ module Bundler
       alias_method :to_h, :stats
 
       def summary
-        { total_gems: @gemfile.count,
-          unpinned_gems: unpinned_gems.count,
+        { declared: @gemfile.count,
+          unpinned: unpinned_gems.count,
+          total: @parser.specs.count,
+          github: github_gems.count,
         }
+      end
+
+      def github_gems
+        @gemfile.select do |dep|
+          dep.source && dep.source.options.include?("github")
+        end
       end
 
       def unpinned_gems

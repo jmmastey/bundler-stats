@@ -94,8 +94,10 @@ describe Bundler::Stats::Calculator do
       target = calculator.summary
 
       expect(target).to be_a(Hash)
-      expect(target).to include(:total_gems)
-      expect(target).to include(:unpinned_gems)
+      expect(target).to include(:declared)
+      expect(target).to include(:total)
+      expect(target).to include(:unpinned)
+      expect(target).to include(:github)
     end
   end
 end
