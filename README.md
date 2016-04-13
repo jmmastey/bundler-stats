@@ -32,9 +32,6 @@ Usage
         bundle-stats stats           # Displays basic stats about the gems in your Gemfile
         bundle-stats version         # Prints the bundler-stats version
 
-Or just run `bundle-stats` anywhere within your ruby project. You can emit JSON
-for automatic consumption with `-f json`.
-
 The most obvious thing to do is run the command by itself, which should help identify problem areas:
 
     > bundle-stats
