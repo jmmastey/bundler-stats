@@ -3,7 +3,7 @@ Bundler Stats
 
 You remember that time someone yanked their library and the entire Node
 universe fell apart? Yeah, me too. And all the thinkpieces that came out just
-aftward were right: you should be careful about what you include in your
+afterward were right: you should be careful about what you include in your
 project.
 
 This project gives you some tools you can use with your existing Gemfile to
@@ -120,6 +120,7 @@ Credits
 Thanks to the many kind people at [RailsCamp East 2016](http://east.railscamp.com)
 for the help, the ideas, and the support.
 
+Thanks to Isaac Bowen for being pedantic about speeling.
 
 License
 -------
