@@ -1,10 +1,11 @@
 Bundler Stats
 =============
 
-You remember that time someone yanked their library and the entire Node
-universe fell apart? Yeah, me too. And all the thinkpieces that came out just
-afterward were right: you should be careful about what you include in your
-project.
+You remember that time [someone yanked their library](http://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm)
+and the entire Node universe fell apart? Yeah, me too. And all the
+[thinkpieces](http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/)
+that came out just afterward were right: you should be careful about
+what you include in your project.
 
 This project gives you some tools you can use with your existing Gemfile to
 determine which gems are including long trees of data, and which you can
