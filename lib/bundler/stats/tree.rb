@@ -22,10 +22,12 @@ class Bundler::Stats::Tree
   end
 
   def version_requirements(target)
-    transitive_dependencies = transitive_dependencies(target)
-    {
-      name: target,
+    transitive_dependencies = transitive_dependencies(target, requirement: true)
+    { name: target,
+      total_dependencies: transitive_dependencies.count,
+      first_level_dependencies: first_level_dependencies(target).count,
       top_level_dependencies: reverse_dependencies_with_versions(target),
+      transitive_dependencies: transitive_dependencies,
     }
   end
 
@@ -64,13 +66,16 @@ class Bundler::Stats::Tree
         if transitive_dependency.name == target
           {
             name: dep.name,
-            version: transitive_dependency.requirement.to_s
+            version: transitive_dependency.requirement.to_s,
+            requirement: transitive_dependency.requirement
           }
         else
           nil
         end
       end
-    end.flatten.compact
+    end.flatten.compact.sort do |a,b|
+      a[:requirement].as_list <=> b[:requirement].as_list
+    end
   end
 
   private
