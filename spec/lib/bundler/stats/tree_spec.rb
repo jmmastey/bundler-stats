@@ -124,6 +124,16 @@ describe Bundler::Stats::Tree do
     end
   end
 
+  context "#version_requirements" do
+    it "is a hash with some keys" do
+      tree = subject.new(parser)
+
+      target = tree.version_requirements("depth-one")
+
+      expect(target).to be_a(Hash)
+    end
+  end
+
   context "skip lists" do
     it "still includes the skipped entry" do
       tree = subject.new(parser, skiplist: ["depth-three"])

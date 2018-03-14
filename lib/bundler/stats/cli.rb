@@ -38,6 +38,20 @@ module Bundler
         end
       end
 
+      desc 'Versions TARGET', 'Prints the dependency tree for a single gem in your Gemfile'
+      method_option :format, aliases: "-f", description: "Output format, either JSON or text"
+      method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
+      def versions(target)
+        calculator = build_calculator(options)
+        stats = calculator.versions(target)
+
+        if options[:format] =~ /json/i
+          say JSON.pretty_generate(stats)
+        else
+          draw_versions(stats, target)
+        end
+      end
+
       desc 'version', 'Prints the bundler-stats version'
       def version
         say "bundler-stats #{VERSION}"
@@ -67,6 +81,20 @@ module Bundler
         say "depended upon by (#{stats[:top_level_dependencies].count}) | #{stats[:top_level_dependencies].values.map(&:name).join(', ')}\n"
         say "depends on (#{stats[:transitive_dependencies].count})      | #{stats[:transitive_dependencies].map(&:name).join(', ')}\n"
         say "unique to this (#{stats[:potential_removals].count})   | #{stats[:potential_removals].map(&:name).join(', ')}\n"
+        say ""
+      end
+
+      def draw_versions(stats, target)
+        say "bundle-stats for #{target}"
+        say ""
+        say "depended upon by (#{stats[:top_level_dependencies].count}):\n"
+        say "+------------------------------|-------------------+"
+        say "| Name                         | Required Version  |"
+        say "+------------------------------|-------------------+"
+        stats[:top_level_dependencies].each do |stat_line|
+          say "| %-28s | %-17s |" % [stat_line[:name], stat_line[:version]]
+        end
+        say "+------------------------------|-------------------+"
         say ""
       end
 
