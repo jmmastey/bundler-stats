@@ -19,7 +19,7 @@ Installation
 
 You don't need to include `bundler-stats` in your Gemfile, just
 `gem install bundler-stats`. Unless you wanted to build automation around its
-usage, in which case, add it to your Gemfile instead. 
+usage, in which case, add it to your Gemfile instead.
 
 
 Usage
@@ -27,10 +27,11 @@ Usage
 
     > bundle-stats help
       Commands:
-        bundle-stats help [COMMAND]  # Describe available commands or one specific command
-        bundle-stats show TARGET     # Prints the dependency tree for a single gem in your Gemfile
-        bundle-stats stats           # Displays basic stats about the gems in your Gemfile
-        bundle-stats version         # Prints the bundler-stats version
+        bundle-stats help [COMMAND]   # Describe available commands or one specific command
+        bundle-stats show TARGET      # Prints the dependency tree for a single gem in your Gemfile
+        bundle-stats stats            # Displays basic stats about the gems in your Gemfile
+        bundle-stats version          # Prints the bundler-stats version
+        bundle-stats versions TARGET  # Shows versions requirements for target in other dependencies
 
 The most obvious thing to do is run the command by itself, which should help identify problem areas:
 

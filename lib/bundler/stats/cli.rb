@@ -38,7 +38,7 @@ module Bundler
         end
       end
 
-      desc 'Versions TARGET', 'Prints the dependency tree for a single gem in your Gemfile'
+      desc 'versions TARGET', 'Shows versions requirements for target in other dependencies'
       method_option :format, aliases: "-f", description: "Output format, either JSON or text"
       method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
       def versions(target)
