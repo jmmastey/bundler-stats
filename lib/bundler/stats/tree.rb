@@ -22,7 +22,7 @@ class Bundler::Stats::Tree
   end
 
   def version_requirements(target)
-    transitive_dependencies = transitive_dependencies(target, requirement: true)
+    transitive_dependencies = transitive_dependencies(target)
     { name: target,
       total_dependencies: transitive_dependencies.count,
       first_level_dependencies: first_level_dependencies(target).count,
