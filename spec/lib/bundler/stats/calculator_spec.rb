@@ -100,4 +100,22 @@ describe Bundler::Stats::Calculator do
       expect(target).to include(:github)
     end
   end
+
+  context "#versions" do
+    it "is a hash" do
+      calculator = subject.new(gemfile_path, lockfile_path)
+      versions = calculator.versions("depth-one")
+
+      expect(versions).to be_a(Hash)
+      expect(versions[:top_level_dependencies]).to eq([])
+    end
+
+    it "returns for second-level deps" do
+      calculator = subject.new(gemfile_path, lockfile_path)
+      versions = calculator.versions("depth-two")
+
+      expect(versions).to be_a(Hash)
+      expect(versions[:top_level_dependencies].map(&:name)).to include("depth-one")
+    end
+  end
 end

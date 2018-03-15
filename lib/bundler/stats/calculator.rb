@@ -29,6 +29,12 @@ module Bundler
         })
       end
 
+      def versions(target)
+        @tree.version_requirements(target).merge({
+          potential_removals: @remover.potential_removals(target)
+        })
+      end
+
       def stats
         { summary: summary,
           gems: gem_stats

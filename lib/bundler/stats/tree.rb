@@ -21,6 +21,16 @@ class Bundler::Stats::Tree
     }
   end
 
+  def version_requirements(target)
+    transitive_dependencies = transitive_dependencies(target)
+    { name: target,
+      total_dependencies: transitive_dependencies.count,
+      first_level_dependencies: first_level_dependencies(target).count,
+      top_level_dependencies: reverse_dependencies_with_versions(target),
+      transitive_dependencies: transitive_dependencies,
+    }
+  end
+
   def first_level_dependencies(target)
     raise ArgumentError, "Unknown gem #{target}" unless @tree.has_key? target
     @tree[target].dependencies
@@ -47,6 +57,24 @@ class Bundler::Stats::Tree
     @tree.select do |name, dep|
       all_deps = transitive_dependencies(name)
       all_deps.any? { |dep| dep.name == target }
+    end
+  end
+
+  def reverse_dependencies_with_versions(target)
+    @tree.map do |name, dep|
+      transitive_dependencies(name).map do |transitive_dependency|
+        if transitive_dependency.name == target
+          {
+            name: dep.name,
+            version: transitive_dependency.requirement.to_s,
+            requirement: transitive_dependency.requirement
+          }
+        else
+          nil
+        end
+      end
+    end.flatten.compact.sort do |a,b|
+      a[:requirement].as_list <=> b[:requirement].as_list
     end
   end
 
