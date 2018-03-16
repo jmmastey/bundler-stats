@@ -87,15 +87,17 @@ module Bundler
       def draw_versions(stats, target)
         say "bundle-stats for #{target}"
         say ""
-        say "depended upon by (#{stats[:top_level_dependencies].count}):\n"
-        say "+------------------------------|-------------------+"
-        say "| Name                         | Required Version  |"
-        say "+------------------------------|-------------------+"
-        stats[:top_level_dependencies].each do |stat_line|
-          say "| %-28s | %-17s |" % [stat_line[:name], stat_line[:version]]
+        say "depended upon by (#{stats[:top_level_dependencies].count})\n"
+        if stats[:top_level_dependencies].count > 0
+          say "+------------------------------|-------------------+"
+          say "| Name                         | Required Version  |"
+          say "+------------------------------|-------------------+"
+          stats[:top_level_dependencies].each do |stat_line|
+            say "| %-28s | %-17s |" % [stat_line[:name], stat_line[:version]]
+          end
+          say "+------------------------------|-------------------+"
+          say ""
         end
-        say "+------------------------------|-------------------+"
-        say ""
       end
 
       def build_calculator(options)
