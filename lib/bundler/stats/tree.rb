@@ -1,5 +1,3 @@
-require 'pry'
-
 class Bundler::Stats::Tree
   attr_accessor :tree
 

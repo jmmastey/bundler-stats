@@ -1,6 +1,11 @@
 Changelog
 =============
 
+## [1.1.0] - 2018-03-16
+### Fixed
+
+- Remove unintentional inclusion of pry outside of dev environment
+
 ## [1.1.0] - 2018-03-15
 ### Added
 
