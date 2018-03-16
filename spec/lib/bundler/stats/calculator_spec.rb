@@ -115,7 +115,7 @@ describe Bundler::Stats::Calculator do
       versions = calculator.versions("depth-two")
 
       expect(versions).to be_a(Hash)
-      expect(versions[:top_level_dependencies].map(&:name)).to include("depth-one")
+      expect(versions[:top_level_dependencies].map { |dep| dep[:name] }).to include("depth-one")
     end
   end
 end
