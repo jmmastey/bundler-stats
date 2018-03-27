@@ -15,7 +15,13 @@ Gem::Specification.new do |gem|
   gem.licenses    = "MIT"
   gem.authors     = "Joseph Mastey"
   gem.email       = "jmmastey@gmail.com"
-  gem.homepage    = "http://github.com/jmmastey/bundler-stats"
+  gem.homepage    = ""
+
+  gem.metadata    = {
+    "homepage_uri" => "http://github.com/jmmastey/bundler-stats",
+    "changelog_uri" => "https://github.com/jmmastey/bundler-stats/blob/master/CHANGELOG.md",
+    "source_code_uri" => "http://github.com/jmmastey/bundler-stats",
+  }
 
   glob = lambda { |patterns| gem.files & Dir[*patterns] }
 
