@@ -1,6 +1,10 @@
 class Bundler::Stats::Tree
   attr_accessor :tree
 
+  ERR_MESSAGE = "The dependency `%s` wasn't found. It may not be present in " \
+                "your Gemfile.lock. This often happens when a dependency isn't " \
+                "installed on your platform."
+
   def initialize(parser, skiplist: [])
     raise ArgumentError unless parser.respond_to?(:specs)
 
@@ -30,12 +34,19 @@ class Bundler::Stats::Tree
   end
 
   def first_level_dependencies(target)
-    raise ArgumentError, "Unknown gem #{target}" unless @tree.has_key? target
+    unless @tree.has_key? target
+      warn(ERR_MESSAGE % [target])
+      return []
+    end
+
     @tree[target].dependencies
   end
 
   def transitive_dependencies(target)
-    raise ArgumentError, "Unknown gem #{target}" unless @tree.has_key? target
+    unless @tree.has_key? target
+      warn(ERR_MESSAGE % [target])
+      return []
+    end
 
     top_level = @tree[target].dependencies
     all_level = top_level + top_level.inject([]) do |arr, dep|
@@ -77,6 +88,10 @@ class Bundler::Stats::Tree
   end
 
   private
+
+  def warn(str)
+    STDERR.puts(str)
+  end
 
   def specs_as_tree(specs)
     specs.each_with_object({}) do |spec, hash|

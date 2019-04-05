@@ -18,10 +18,13 @@ describe Bundler::Stats::Tree do
   end
 
   context "#first_level_dependencies" do
-    it "errors for non-existent dependencies" do
+    it "warns you of missing dependencies from other platforms" do
       tree = subject.new(parser)
+      allow(tree).to receive(:warn)
 
-      expect { tree.first_level_dependencies("none") }.to raise_error(ArgumentError)
+      tree.first_level_dependencies("none")
+
+      expect(tree).to have_received(:warn)
     end
 
     it "returns empty array for bottom-level dependencies" do
@@ -50,10 +53,13 @@ describe Bundler::Stats::Tree do
   end
 
   context "#transitive_dependencies" do
-    it "errors for non-existent dependencies" do
+    it "warns you of missing dependencies from other platforms" do
       tree = subject.new(parser)
+      allow(tree).to receive(:warn)
 
-      expect { tree.transitive_dependencies("none") }.to raise_error(ArgumentError)
+      tree.transitive_dependencies("none")
+
+      expect(tree).to have_received(:warn)
     end
 
     it "returns empty array for bottom-level dependencies" do
