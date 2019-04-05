@@ -59,14 +59,18 @@ module Bundler
 
       private
 
+      # TODO: just install table_print, 'eh?
       def draw_stats(gem_stats, summary)
-        say "+------------------------------|-----------------|-----------------+"
-        say "| Name                         | Total Deps      | 1st Level Deps  |"
-        say "+------------------------------|-----------------|-----------------+"
+        max_name_length = gem_stats.map { |gem| gem[:name].length }.max
+
+        say "+-#{"-" * max_name_length}-|-----------------|-----------------+"
+        say "| %-#{max_name_length}s | Total Deps      | 1st Level Deps  |" % ["Name"]
+        say "+-#{"-" * max_name_length}-|-----------------|-----------------+"
+
         gem_stats.each do |stat_line|
-          say "| %-28s | %-15s | %-15s |" % [stat_line[:name], stat_line[:total_dependencies], stat_line[:first_level_dependencies]]
+          say "| %-#{max_name_length}s | %-15s | %-15s |" % [stat_line[:name], stat_line[:total_dependencies], stat_line[:first_level_dependencies]]
         end
-        say "+------------------------------|-----------------|-----------------+"
+        say "+-#{"-" * max_name_length}-|-----------------|-----------------+"
         say ""
         say "Declared Gems:     #{summary[:declared]}"
         say "Total Gems:        #{summary[:total]}"
@@ -85,17 +89,20 @@ module Bundler
       end
 
       def draw_versions(stats, target)
+        dependers = stats[:top_level_dependencies] # they do the depending
         say "bundle-stats for #{target}"
         say ""
         say "depended upon by (#{stats[:top_level_dependencies].count})\n"
-        if stats[:top_level_dependencies].count > 0
-          say "+------------------------------|-------------------+"
-          say "| Name                         | Required Version  |"
-          say "+------------------------------|-------------------+"
-          stats[:top_level_dependencies].each do |stat_line|
-            say "| %-28s | %-17s |" % [stat_line[:name], stat_line[:version]]
+        if dependers.count > 0
+          max_name_length = dependers.map { |gem| gem[:name].length }.max
+
+          say "+-#{"-" * max_name_length}-|-------------------+"
+          say "| %-#{max_name_length}s | Required Version  |" % ["Name"]
+          say "+-#{"-" * max_name_length}-|-------------------+"
+          dependers.each do |stat_line|
+            say "| %-#{max_name_length}s | %-17s |" % [stat_line[:name], stat_line[:version]]
           end
-          say "+------------------------------|-------------------+"
+          say "+-#{"-" * max_name_length}-|-------------------+"
           say ""
         end
       end
