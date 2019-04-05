@@ -64,7 +64,7 @@ module Bundler
         stats = @gemfile.map do |gem|
           @tree.summarize(gem.name)
         end
-        stats.sort_by { |row| row[:total_dependencies] }
+        stats.sort_by { |row| row[:total_dependencies] }.reverse
       end
     end
   end
