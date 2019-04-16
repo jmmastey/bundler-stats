@@ -26,9 +26,9 @@ module Bundler
         while !deps_to_check.empty? do
           candidate = deps_to_check.pop.name
 
-          next if candidate == deleted
-          next if candidate == "bundler"
+          next if [deleted, "bundler"].include? candidate
           return true if candidate == target
+          next if modified_tree[candidate].nil?
 
           deps_to_check += modified_tree[candidate].dependencies
         end
