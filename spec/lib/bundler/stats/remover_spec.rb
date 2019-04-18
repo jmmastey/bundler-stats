@@ -102,5 +102,15 @@ describe Bundler::Stats::Remover do
 
       expect(target).to be_falsy
     end
+
+    it "raises an error if the top level dependency isn't in the lockfile" do
+      top_level << dep("tzinfo")
+      remover = subject.new(tree, top_level)
+      allow(remover).to receive(:warn)
+
+      remover.still_used?("actionview", deleted: "rails")
+
+      expect(remover).to have_received(:warn)
+    end
   end
 end
