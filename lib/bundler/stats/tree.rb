@@ -25,7 +25,10 @@ class Bundler::Stats::Tree
 
   def version_requirements(target)
     transitive_dependencies = transitive_dependencies(target)
+    resolved_version = @tree[target].version if @tree.has_key?(target)
+
     { name: target,
+      resolved_version: resolved_version,
       total_dependencies: transitive_dependencies.count,
       first_level_dependencies: first_level_dependencies(target).count,
       top_level_dependencies: reverse_dependencies_with_versions(target),
