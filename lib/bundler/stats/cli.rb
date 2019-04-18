@@ -92,7 +92,11 @@ module Bundler
         dependers = stats[:top_level_dependencies] # they do the depending
         say "bundle-stats for #{target}"
         say ""
-        say "depended upon by (#{stats[:top_level_dependencies].count})\n"
+        say "Depended upon by #{stats[:top_level_dependencies].count}\n"
+
+        if stats[:resolved_version]
+          say "Resolved version is #{stats[:resolved_version]}"
+        end
         if dependers.count > 0
           max_name_length = dependers.map { |gem| gem[:name].length }.max
 
