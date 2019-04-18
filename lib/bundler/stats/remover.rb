@@ -1,11 +1,12 @@
 class Bundler::Stats::Remover
-  ERR_MESSAGE = "Trying to check whether `%s` can be removed, but was unable " \
+  ERR_MESSAGE = "Trying to check whether dep can be removed, but was unable " \
     "to resolve whether it is used by `%s`. It may not be in your Gemfile.lock. " \
     "This often happens when a dependency isn't installed on your platform."
 
   def initialize(tree, top_level)
-    @tree       = tree
-    @top_level  = top_level
+    @tree           = tree
+    @top_level      = top_level
+    @trace_warnings = []
   end
 
   def potential_removals(target)
@@ -33,7 +34,7 @@ class Bundler::Stats::Remover
       return true if candidate == target
 
       if modified_tree[candidate].nil?
-        warn(ERR_MESSAGE % [target, candidate])
+        warn_of_bad_tracing(candidate)
       else
         deps_to_check += modified_tree[candidate].dependencies
       end
@@ -44,7 +45,10 @@ class Bundler::Stats::Remover
 
   private
 
-  def warn(str)
-    STDERR.puts(str)
+  def warn_of_bad_tracing(candidate)
+    return if @trace_warnings.include? candidate
+
+    STDERR.puts(ERR_MESSAGE % [candidate])
+    @trace_warnings << candidate
   end
 end
