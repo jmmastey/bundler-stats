@@ -59,56 +59,61 @@ module Bundler
 
       private
 
-      # TODO: just install table_print, 'eh?
       def draw_stats(gem_stats, summary)
         max_name_length = gem_stats.map { |gem| gem[:name].length }.max
 
-        say "+-#{"-" * max_name_length}-|-----------------|-----------------+"
-        say "| %-#{max_name_length}s | Total Deps      | 1st Level Deps  |" % ["Name"]
-        say "+-#{"-" * max_name_length}-|-----------------|-----------------+"
+        say Printer.new(
+          headers: ["Name", "Total Deps", "1st Level Deps"],
+          data: gem_stats.map { |stat_line|
+            [stat_line[:name], stat_line[:total_dependencies], stat_line[:first_level_dependencies]]
+        }).to_s
 
-        gem_stats.each do |stat_line|
-          say "| %-#{max_name_length}s | %-15s | %-15s |" % [stat_line[:name], stat_line[:total_dependencies], stat_line[:first_level_dependencies]]
-        end
-        say "+-#{"-" * max_name_length}-|-----------------|-----------------+"
+        say Printer.new(
+          headers: nil,
+          borders: false,
+          data: [
+            ["Declared Gems",      summary[:declared]],
+            ["Total Gems",         summary[:total]],
+            ["", ""],
+            ["Unpinned Versions",  summary[:unpinned]],
+            ["Github Refs",        summary[:github]],
+        ]).to_s
         say ""
-        say "Declared Gems:     #{summary[:declared]}"
-        say "Total Gems:        #{summary[:total]}"
-        say ""
-        say "Unpinned Versions: #{summary[:unpinned]}"
-        say "Github Refs:       #{summary[:github]}"
       end
 
       def draw_show(stats, target)
         say "bundle-stats for #{target}"
         say ""
-        say "depended upon by (#{stats[:top_level_dependencies].count}) | #{stats[:top_level_dependencies].values.map(&:name).join(', ')}\n"
-        say "depends on (#{stats[:transitive_dependencies].count})      | #{stats[:transitive_dependencies].map(&:name).join(', ')}\n"
-        say "unique to this (#{stats[:potential_removals].count})   | #{stats[:potential_removals].map(&:name).join(', ')}\n"
-        say ""
+
+        say Printer.new(
+          data: [
+            ["Depended Upon By (#{stats[:top_level_dependencies].count})",  stats[:top_level_dependencies].values.map(&:name)],
+            ["Depends On (#{stats[:transitive_dependencies].count})",       stats[:transitive_dependencies].map(&:name)],
+            ["Unique to This (#{stats[:potential_removals].count})",        stats[:potential_removals].map(&:name)],
+        ]).to_s
       end
 
       def draw_versions(stats, target)
         dependers = stats[:top_level_dependencies] # they do the depending
         say "bundle-stats for #{target}"
-        say ""
-        say "Depended upon by #{stats[:top_level_dependencies].count}\n"
+        say Printer.new(
+          headers: nil,
+          borders: false,
+          data: [
+            ["Depended Upon By", stats[:top_level_dependencies].count],
+            ["Resolved Version", stats[:resolved_version]],
+        ]).to_s
 
-        if stats[:resolved_version]
-          say "Resolved version is #{stats[:resolved_version]}"
-        end
         if dependers.count > 0
-          max_name_length = dependers.map { |gem| gem[:name].length }.max
-
-          say "+-#{"-" * max_name_length}-|-------------------+"
-          say "| %-#{max_name_length}s | Required Version  |" % ["Name"]
-          say "+-#{"-" * max_name_length}-|-------------------+"
-          dependers.each do |stat_line|
-            say "| %-#{max_name_length}s | %-17s |" % [stat_line[:name], stat_line[:version]]
-          end
-          say "+-#{"-" * max_name_length}-|-------------------+"
           say ""
+          say Printer.new(
+            headers: ["Name", "Required Version"],
+            data: dependers.map { |stat_line|
+              [stat_line[:name], stat_line[:version]]
+          }).to_s
         end
+
+        say ""
       end
 
       def build_calculator(options)
