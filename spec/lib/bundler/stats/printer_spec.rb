@@ -30,6 +30,17 @@ describe Bundler::Stats::Printer do
         expect(response).to eq(80)
       end
     end
+
+    context "tput returns an error" do
+      it "returns the default value" do
+        allow(Kernel).to receive(:send).and_return("tput: No value for $TERM and no -T specified")
+
+        printer   = subject.new
+        response  = printer.terminal_width
+
+        expect(response).to eq(80)
+      end
+    end
   end
 
   describe "#column_widths" do
