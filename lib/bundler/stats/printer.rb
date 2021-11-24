@@ -38,7 +38,7 @@ class Bundler::Stats::Printer
 
   def terminal_width
     Integer(Kernel.send(:"`", "tput cols"))
-  rescue Errno::ENOENT, TypeError, Errno::ENOENT, ArgumentError
+  rescue StandardError
     80
   end
 
