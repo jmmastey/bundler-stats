@@ -77,6 +77,16 @@ describe Bundler::Stats::Calculator do
   end
 
   context "#gem_stats" do
+    let(:partial_sorted_result) do
+      [
+        ["will_paginate", 0],
+        ["rolify", 0],
+        ["rubocop-rspec", 0],
+        ["spring", 0],
+        ["state_machine", 0],
+      ]
+    end
+
     it "includes entries for each gem" do
       calculator = subject.new(gemfile_path, lockfile_path)
 
@@ -84,6 +94,14 @@ describe Bundler::Stats::Calculator do
 
       expect(target).to be_a(Array)
       expect(target.length).to eq(calculator.gemfile.length)
+    end
+
+    it "sorts entries by total dependencies descending and name ascending" do
+      calculator = subject.new(gemfile_path, lockfile_path)
+
+      target = calculator.gem_stats
+      tuple = target.map {|x| [x[:name], x[:total_dependencies]] }
+      expect(tuple).to end_with(*partial_sorted_result)
     end
   end
 
