@@ -1,6 +1,17 @@
 Changelog
 =============
 
+## [2.1.1] - 2021-11-29
+
+### Changed
+- Symlink isn't the recommended way to alias a command. Patterned current
+  solution after bundle-audit. Boy that naming convention was unfortunate.
+- Pin down dependencies a bit.
+
+### Added
+- New default ruby version to be most current non-3 ruby.
+- Build artifacts now ignored.
+
 ## [2.1.0] - 2021-11-29
 
 ### Changed

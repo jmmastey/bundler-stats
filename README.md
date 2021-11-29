@@ -154,7 +154,7 @@ Credits
 Thanks to the many kind people at [RailsCamp East
 2016](http://east.railscamp.com) for the help, the ideas, and the support.
 
-Thanks to Isaac Bowen for being pedantic about speeling.
+Also, many other folks for their feature / fix contributions. ❤️
 
 License
 -------
