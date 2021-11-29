@@ -79,11 +79,11 @@ describe Bundler::Stats::Calculator do
   context "#gem_stats" do
     let(:partial_sorted_result) do
       [
-        ["will_paginate", 0],
         ["rolify", 0],
         ["rubocop-rspec", 0],
         ["spring", 0],
         ["state_machine", 0],
+        ["will_paginate", 0]
       ]
     end
 
