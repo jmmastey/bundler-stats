@@ -1,5 +1,4 @@
-require 'bundler'
-require 'bundler/stats'
+require 'spec_helper'
 
 describe Bundler::Stats::Printer do
   subject { described_class }

@@ -1,5 +1,4 @@
-require 'bundler'
-require 'bundler/stats'
+require 'spec_helper'
 
 describe Bundler::Stats::Calculator do
   subject { described_class }
