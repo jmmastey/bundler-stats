@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.licenses    = "MIT"
   gem.authors     = "Joseph Mastey"
   gem.email       = "jmmastey@gmail.com"
-  gem.homepage    = ""
+  gem.homepage    = "http://github.com/jmmastey/bundler-stats"
 
   gem.metadata    = {
     "homepage_uri" => "http://github.com/jmmastey/bundler-stats",
@@ -38,7 +38,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency "bundler", ">= 1.9", "< 3"
   gem.add_dependency "thor", "~> 0.19"
 
-  gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec", "~> 3.4"
   gem.add_development_dependency "guard", "~> 2.13"
   gem.add_development_dependency "guard-rspec", "< 5"
