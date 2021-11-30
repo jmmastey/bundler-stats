@@ -1,7 +1,7 @@
 Changelog
 =============
 
-## [2.1.1] - 2021-11-29
+## [2.1.1] - 2021-11-30
 
 ### Changed
 - Symlink isn't the recommended way to alias a command. Patterned current
@@ -9,8 +9,13 @@ Changelog
 - Pin down dependencies a bit.
 
 ### Added
+- Moved to Github test workflow, by @etagwerker.
 - New default ruby version to be most current non-3 ruby.
 - Build artifacts now ignored.
+- Moved to a real spec_helper so tests can be filtered during runs if desired.
+
+### Fixed
+- Failing test from previous version.
 
 ## [2.1.0] - 2021-11-29
 
