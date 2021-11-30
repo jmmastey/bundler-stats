@@ -1,5 +1,4 @@
-require 'bundler'
-require 'bundler/stats'
+require 'spec_helper'
 
 LazyLazySpec = Struct.new(:name, :dependencies)
 FakeLockfileParser = Struct.new(:specs)
