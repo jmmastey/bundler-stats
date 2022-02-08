@@ -59,6 +59,10 @@ module Bundler
 
       private
 
+      def self.exit_on_failure?
+        true
+      end
+
       def draw_stats(gem_stats, summary)
         max_name_length = gem_stats.map { |gem| gem[:name].length }.max
 
