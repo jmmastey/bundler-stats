@@ -129,19 +129,23 @@ module Bundler
       def gemfile_path
         cwd = Pathname.new("./")
         until cwd.realdirpath.root? do
-          return (cwd + "Gemfile") if File.exist?(cwd + "Gemfile")
+          %w(gems.rb Gemfile).each do |gemfile|
+            return (cwd + gemfile) if File.exist?(cwd + gemfile)
+          end
           cwd = cwd.parent
         end
-        raise ArgumentError, "Couldn't find Gemfile in this directory or parents"
+        raise ArgumentError, "Couldn't find gems.rb nor Gemfile in this directory or parents"
       end
 
       def lockfile_path
         cwd = Pathname.new(".")
         until cwd.realdirpath.root? do
-          return (cwd + "Gemfile.lock") if File.exist?(cwd + "Gemfile.lock")
+          %w(gems.locked Gemfile.lock).each do |lockfile|
+            return (cwd + lockfile) if File.exist?(cwd + lockfile)
+          end
           cwd = cwd.parent
         end
-        raise ArgumentError, "Couldn't find Gemfile in this directory or parents"
+        raise ArgumentError, "Couldn't find gems.locked nor Gemfile.lock in this directory or parents"
       end
     end
   end
