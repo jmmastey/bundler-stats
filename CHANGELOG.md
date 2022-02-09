@@ -1,6 +1,13 @@
 Changelog
 =============
 
+## [2.2.0] - 2022-02-09
+
+### Added
+- Support for gems.rb and gems.locked files.
+- Proper exit codes from thor when errors occur
+- Looser dependency on thor
+
 ## [2.1.1] - 2021-11-30
 
 ### Changed
