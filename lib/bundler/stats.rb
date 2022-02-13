@@ -1,5 +1,6 @@
 require_relative 'stats/calculator'
 require_relative 'stats/printer'
 require_relative 'stats/remover'
+require_relative 'stats/skiplist'
 require_relative 'stats/tree'
 require_relative 'stats/version'

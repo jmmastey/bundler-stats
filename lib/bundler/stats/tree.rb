@@ -1,20 +1,21 @@
 class Bundler::Stats::Tree
-  attr_accessor :tree
+  attr_accessor :tree, :skiplist
 
   ERR_MESSAGE = "The dependency `%s` wasn't found. It may not be present in " \
                 "your Gemfile.lock. This often happens when a dependency isn't " \
                 "installed on your platform."
 
-  def initialize(parser, skiplist: [])
+  def initialize(parser, skiplist: '')
     raise ArgumentError unless parser.respond_to?(:specs)
 
     @parser   = parser
     @tree     = specs_as_tree(@parser.specs)
-    @skiplist = skiplist
+    @skiplist = Bundler::Stats::Skiplist.new(skiplist)
   end
 
   def summarize(target)
     transitive_dependencies = transitive_dependencies(target)
+
     { name: target,
       total_dependencies: transitive_dependencies.count,
       first_level_dependencies: first_level_dependencies(target).count,
@@ -51,12 +52,12 @@ class Bundler::Stats::Tree
       return []
     end
 
-    top_level = @tree[target].dependencies
+    top_level = skiplist.filter(@tree[target].dependencies)
     all_level = top_level + top_level.inject([]) do |arr, dep|
       # turns out bundler refuses to include itself in the dependency tree,
       # which is sneaky
       next arr if dep.name == "bundler"
-      next arr if @skiplist.include? dep.name
+      next arr if skiplist.include? dep
 
       arr += transitive_dependencies(dep.name)
     end

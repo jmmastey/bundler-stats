@@ -1,6 +1,12 @@
 Changelog
 =============
 
+## [2.3.0] - 2022-02-12
+
+### Added
+- Skiplist now correctly removes dependencies from 1st and onward levels
+- Wildcard ability for specifying gems for skiplist
+
 ## [2.2.0] - 2022-02-09
 
 ### Added

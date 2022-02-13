@@ -5,7 +5,7 @@ module Bundler
     class Calculator
       attr_reader :parser, :tree, :gemfile, :remover
 
-      def initialize(gemfile_path, lockfile_path, options = {})
+      def initialize(gemfile_path, lockfile_path, skiplist = nil)
         raise ArgumentError unless File.readable?(lockfile_path)
         raise ArgumentError unless File.readable?(gemfile_path)
 
@@ -17,9 +17,7 @@ module Bundler
         lock_contents = File.read(lockfile_path)
         @parser = Bundler::LockfileParser.new(lock_contents)
 
-        skiplist = options.fetch(:skiplist, [])
         @tree = Bundler::Stats::Tree.new(@parser, skiplist: skiplist)
-
         @remover = Bundler::Stats::Remover.new(@tree, @gemfile)
       end
 

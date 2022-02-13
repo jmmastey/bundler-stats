@@ -140,20 +140,24 @@ describe Bundler::Stats::Tree do
   end
 
   context "skip lists" do
-    it "still includes the skipped entry" do
+    it "skips processing the requested entry, plus children of skipped entries" do
       tree = subject.new(parser, skiplist: ["depth-three"])
 
       target = tree.transitive_dependencies("depth-one")
 
-      expect(target.map(&:name)).to include("depth-three")
+      expect(target.map(&:name)).to include("depth-two")
+      expect(target.map(&:name)).not_to include("depth-three")
+      expect(target.map(&:name)).not_to include("depth-four")
     end
 
-    it "stops processing the children of skipped entries" do
-      tree = subject.new(parser, skiplist: ["depth-three"])
+    it "allows skiplist wildcards" do
+      tree = subject.new(parser, skiplist: ["depth-t*"])
 
       target = tree.transitive_dependencies("depth-one")
 
-      expect(target.map(&:name)).not_to include("depth-four")
+      expect(target.map(&:name)).not_to include("depth-two")
+      expect(target.map(&:name)).not_to include("depth-three")
+      expect(target.map(&:name)).not_to include("depth-four") # because transitive
     end
   end
 end

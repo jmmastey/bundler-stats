@@ -121,13 +121,8 @@ module Bundler
       end
 
       def build_calculator(options)
-        if !options[:nofollow].nil?
-          skiplist = options[:nofollow].gsub(/\s+/, '').split(",")
-        else
-          skiplist = []
-        end
-
-        @calculator ||= Bundler::Stats::Calculator.new(gemfile_path, lockfile_path, skiplist: skiplist)
+        skiplist = Bundler::Stats::Skiplist.new(options[:nofollow])
+        @calculator ||= Bundler::Stats::Calculator.new(gemfile_path, lockfile_path, skiplist)
       end
 
       def gemfile_path

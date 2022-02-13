@@ -38,9 +38,9 @@ describe Bundler::Stats::Calculator do
       # this sucks. break this dependency further
       allow(Bundler::LockfileParser).to receive(:new) { "parser" }
 
-      target = subject.new(gemfile_path, lockfile_path, skiplist: "abc")
+      target = subject.new(gemfile_path, lockfile_path, "skiplist")
 
-      expect(Bundler::Stats::Tree).to have_received(:new).with("parser", skiplist: "abc")
+      expect(Bundler::Stats::Tree).to have_received(:new).with("parser", skiplist: "skiplist")
     end
   end
 

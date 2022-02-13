@@ -35,7 +35,7 @@ Usage
         bundle-stats versions TARGET  # Shows versions requirements for target in other dependencies
 
 The most obvious thing to do is run the command by itself, which should help
-identify problem areas:
+identify problem areas.
 
     > bundle-stats
 
@@ -62,7 +62,7 @@ identify problem areas:
       Unpinned Versions   54
             Github Refs   0
 
-It looks like rails_admin is a huge problem. Use `show` to investigate:
+It looks like rails_admin is a huge problem. Use `show` to investigate.
 
     > bundle-stats show rails_admin
     bundle-stats for rails_admin
@@ -98,22 +98,74 @@ It looks like rails_admin is a huge problem. Use `show` to investigate:
     |                                | bundler                                |
     +--------------------------------|----------------------------------------+
 
-Removing the dep will only actually remove 9 gems. The rest are shared
-dependencies with other gems like rails. We can also omit trees we aren't going
-to remove (hi rails) by not following them:
+### Skipping Common Dependencies
 
-    > bundle-stats show sass-rails --nofollow="railties,activesupport,actionpack"
-    bundle-stats for sass-rails
+Let's take a look at another common gem to rails codebases. In this case,
+we have some unique dependencies, but also many dependencies on rails, and on
+its constituent gems.
+
+    > bundle-stats show compass-rails
+    bundle-stats for compass-rails
 
     +--------------------------------|----------------------------------------+
-    |           Depended Upon By (2) | compass-rails, rails_admin             |
-    |                 Depends On (9) | railties, sass, sprockets              |
+    |           Depended Upon By (0) |                                        |
+    |                Depends On (35) | compass, sass-rails, sprockets         |
+    |                                | chunky_png, compass-core               |
+    |                                | compass-import-once, rb-fsevent        |
+    |                                | rb-inotify, sass, multi_json, ffi      |
+    |                                | railties, sprockets-rails, tilt        |
+    |                                | actionpack, activesupport, method_source |
+    |                                | rake, thor, actionview, rack, rack-test |
+    |                                | rails-dom-testing, rails-html-sanitizer |
+    |                                | builder, erubi, concurrent-ruby, i18n  |
+    |                                | minitest, tzinfo, thread_safe, nokogiri |
+    |                                | mini_portile2, loofah, crass           |
+    |             Unique to This (3) | compass, compass-core                  |
+    |                                | compass-import-once                    |
+    +--------------------------------|----------------------------------------+
+
+We're not looking to remove rails, so there's not much point in including it
+within this output. Instead, we can use the `nofollow` flag to skip it in all
+output lists.
+
+    > bundle-stats show compass-rails --nofollow="railties,activeupport,actionview,actionpack"
+    bundle-stats for compass-rails
+
+    +--------------------------------|----------------------------------------+
+    |           Depended Upon By (0) |                                        |
+    |                Depends On (20) | compass, sass-rails, sprockets         |
+    |                                | chunky_png, compass-core               |
+    |                                | compass-import-once, rb-fsevent        |
+    |                                | rb-inotify, sass, multi_json, ffi      |
     |                                | sprockets-rails, tilt, concurrent-ruby |
-    |                                | rack, actionpack, activesupport        |
-    |             Unique to This (0) |                                        |
+    |                                | rack, activesupport, i18n, minitest    |
+    |                                | tzinfo, thread_safe                    |
+    |             Unique to This (3) | compass, compass-core                  |
+    |                                | compass-import-once                    |
     +--------------------------------|----------------------------------------+
 
-To consume information with a build job or somesuch, all commands can emit JSON:
+This is better, but for other codebases it's common for gems to depend on each
+of the _many many_ child gems of rails individually. Rather than specifying each
+by itself, we can use wildcards to remove them in bulk.
+
+    > bundle-stats show compass-rails --nofollow="rail*,action*,active*"
+    bundle-stats for compass-rails
+
+    +--------------------------------|----------------------------------------+
+    |           Depended Upon By (0) |                                        |
+    |                Depends On (15) | compass, sass-rails, sprockets         |
+    |                                | chunky_png, compass-core               |
+    |                                | compass-import-once, rb-fsevent        |
+    |                                | rb-inotify, sass, multi_json, ffi      |
+    |                                | sprockets-rails, tilt, concurrent-ruby |
+    |                                | rack                                   |
+    |             Unique to This (3) | compass, compass-core                  |
+    |                                | compass-import-once                    |
+    +--------------------------------|----------------------------------------+
+
+### Output Formats
+
+To consume information with a build job or somesuch, all commands can emit JSON.
 
     > bundle-stats show sass-rails --nofollow="railties,activesupport,actionpack" -f json
     {
