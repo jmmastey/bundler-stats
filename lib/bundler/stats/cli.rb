@@ -99,7 +99,7 @@ module Bundler
 
       def draw_versions(stats, target)
         dependers = stats[:top_level_dependencies] # they do the depending
-        say "bundle-stats for #{target}"
+        say "version dependencies for #{target}"
         say Printer.new(
           headers: nil,
           borders: false,

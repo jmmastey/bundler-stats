@@ -34,6 +34,8 @@ Usage
         bundle-stats version          # Prints the bundler-stats version
         bundle-stats versions TARGET  # Shows versions requirements for target in other dependencies
 
+### Auditing Your Gemfile
+
 The most obvious thing to do is run the command by itself, which should help
 identify problem areas.
 
@@ -162,6 +164,49 @@ by itself, we can use wildcards to remove them in bulk.
     |             Unique to This (3) | compass, compass-core                  |
     |                                | compass-import-once                    |
     +--------------------------------|----------------------------------------+
+
+### Showing Required Versions
+
+Sometimes you try to upgrade a gem, you ask bundler _very nicely_, but you
+find that the version hasn't changed. When that happens, sometimes it's not
+clear why the gem version isn't changing.
+
+In that case, use `versions` to list all required dependencies on your gem.
+
+    > bundle-stats versions actionpack
+    version dependencies for actionpack
+
+    Depended Upon By   24
+    Resolved Version   5.2.0
+
+    +----------------------------|------------------+
+    |                       Name | Required Version |
+    +----------------------------|------------------+
+    |                  webpacker | = 5.2.0          |
+    |               actionmailer | = 5.2.0          |
+    |              activestorage | = 5.2.0          |
+    |               coffee-rails | = 5.2.0          |
+    |              compass-rails | = 5.2.0          |
+    |                     devise | = 5.2.0          |
+    |          factory_bot_rails | = 5.2.0          |
+    |         font-awesome-rails | = 5.2.0          |
+    |                rails_admin | = 5.2.0          |
+    |                   railties | = 5.2.0          |
+    |                 sass-rails | = 5.2.0          |
+    |                     scenic | = 5.2.0          |
+    |                 versionist | = 5.2.0          |
+    |                actioncable | = 5.2.0          |
+    |               jquery-rails | = 5.2.0          |
+    |            jquery-ui-rails | = 5.2.0          |
+    | jquery_file_download-rails | = 5.2.0          |
+    |                      rails | = 5.2.0          |
+    |                rspec-rails | >= 3.0           |
+    |            sprockets-rails | >= 4.0           |
+    |                 haml-rails | >= 4.0.1         |
+    |                 responders | >= 4.2.0, < 5.3  |
+    |                simple_form | >= 5.0           |
+    |   rails-controller-testing | ~> 5.x, >= 5.0.1 |
+    +----------------------------|------------------+
 
 ### Output Formats
 
