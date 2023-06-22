@@ -13,6 +13,7 @@ module Bundler
       desc 'stats', 'Displays basic stats about the gems in your Gemfile'
       method_option :format, aliases: "-f", description: "Output format, either JSON or text"
       method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
+      method_option :gemfile_path, description: "Custom path for Gemfile/gems.rb and Gemfile.lock/gems.locked"
       def stats
         calculator = build_calculator(options)
         stats = calculator.stats
@@ -27,6 +28,7 @@ module Bundler
       desc 'show TARGET', 'Prints the dependency tree for a single gem in your Gemfile'
       method_option :format, aliases: "-f", description: "Output format, either JSON or text"
       method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
+      method_option :gemfile_path, description: "Custom path for Gemfile/gems.rb and Gemfile.lock/gems.locked"
       def show(target)
         calculator = build_calculator(options)
         stats = calculator.summarize(target)
@@ -41,6 +43,7 @@ module Bundler
       desc 'versions TARGET', 'Shows versions requirements for target in other dependencies'
       method_option :format, aliases: "-f", description: "Output format, either JSON or text"
       method_option :nofollow, description: "A comma delimited list of dependencies not to follow."
+      method_option :gemfile_path, description: "Custom path for Gemfile/gems.rb and Gemfile.lock/gems.locked"
       def versions(target)
         calculator = build_calculator(options)
         stats = calculator.versions(target)
@@ -122,29 +125,15 @@ module Bundler
 
       def build_calculator(options)
         skiplist = Bundler::Stats::Skiplist.new(options[:nofollow])
-        @calculator ||= Bundler::Stats::Calculator.new(gemfile_path, lockfile_path, skiplist)
+        @calculator ||= Bundler::Stats::Calculator.new(
+          file_path_resolver.gemfile_path,
+          file_path_resolver.lockfile_path,
+          skiplist
+        )
       end
 
-      def gemfile_path
-        cwd = Pathname.new("./")
-        until cwd.realdirpath.root? do
-          %w(gems.rb Gemfile).each do |gemfile|
-            return (cwd + gemfile) if File.exist?(cwd + gemfile)
-          end
-          cwd = cwd.parent
-        end
-        raise ArgumentError, "Couldn't find gems.rb nor Gemfile in this directory or parents"
-      end
-
-      def lockfile_path
-        cwd = Pathname.new(".")
-        until cwd.realdirpath.root? do
-          %w(gems.locked Gemfile.lock).each do |lockfile|
-            return (cwd + lockfile) if File.exist?(cwd + lockfile)
-          end
-          cwd = cwd.parent
-        end
-        raise ArgumentError, "Couldn't find gems.locked nor Gemfile.lock in this directory or parents"
+      def file_path_resolver
+        @file_path_resolver ||= Bundler::Stats::FilePathResolver.new(options[:gemfile_path])
       end
     end
   end
