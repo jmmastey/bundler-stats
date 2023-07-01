@@ -237,6 +237,14 @@ To consume information with a build job or somesuch, all commands can emit JSON.
       ]
     }
 
+### Custom Gemfile path
+
+This gem by default attempts to locate the Gemfile and Gemfile.lock files in parent directories. If you want to specify a specific location for your Gemfile/gems.rb file, you can use the `--gemfile_path` option.
+
+    > bundle-stats show sass-rails --gemfile_path=/Users/user/project/Gemfile
+
+Keep in mind that the location of the Gemfile.lock/gems.locked file will be inferred from the location of the Gemfile/gems.rb file.
+
 Contributing
 ------------
 
