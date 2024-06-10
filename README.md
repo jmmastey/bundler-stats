@@ -248,7 +248,13 @@ Keep in mind that the location of the Gemfile.lock/gems.locked file will be infe
 Contributing
 ------------
 
-Contributions are very welcome. Fork, fix, submit pulls.
+Contributions are very welcome. Fork, fix, submit pull requests.
+
+Before you submit your pull request, make sure that the test suite passes:
+
+```
+bundle exec rspec spec
+```
 
 Contribution is expected to conform to the [Contributor Covenant](https://github.com/jmmastey/bundler-stats/blob/master/CODE_OF_CONDUCT.md).
 
