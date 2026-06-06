@@ -1,9 +1,10 @@
 Changelog
 =============
 
-## Unreleased
+## [2.4.2] - 2026-06-06
 
 - Relax Bundler dependency to work with Bundler 4.x
+- Also relax a few more dependencies
 
 ## [2.3.0] - 2022-02-12
 
